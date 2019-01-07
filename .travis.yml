@@ -15,7 +15,7 @@ matrix:
       env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.1
     - os: osx
       osx_image: xcode10.1
-      env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.2
+      env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.2 LINT=TRUE
     - os: linux
       env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.0
     - os: linux
@@ -47,8 +47,8 @@ install:
 before_script:
   - mkdir ${PWD}/mongodb-${MONGODB_VERSION}/data
   - ${PWD}/mongodb-${MONGODB_VERSION}/bin/mongod --dbpath ${PWD}/mongodb-${MONGODB_VERSION}/data --logpath ${PWD}/mongodb-${MONGODB_VERSION}/mongodb.log --enableMajorityReadConcern --fork
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew upgrade swiftlint; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then swiftlint --strict; fi
+  - if [[ "$LINT" == "TRUE" ]]; then brew upgrade swiftlint; fi
+  - if [[ "$LINT" == "TRUE" ]]; then swiftlint --strict; fi
 
 script:
   - swift build -v
