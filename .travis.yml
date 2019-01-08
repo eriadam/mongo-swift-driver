@@ -38,6 +38,6 @@ before_script:
   - if [[ "$TASK" != "LINT" ]]; then mkdir ${PWD}/mongodb-${MONGODB_VERSION}/data; ${PWD}/mongodb-${MONGODB_VERSION}/bin/mongod --dbpath ${PWD}/mongodb-${MONGODB_VERSION}/data --logpath ${PWD}/mongodb-${MONGODB_VERSION}/mongodb.log --enableMajorityReadConcern --fork; fi
 
 script:
-  - if [[ "$TASK" == "LINT" ]]; then HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade swiftlint; swiftlint --strict; fi 
+  - if [[ "$TASK" == "LINT" ]]; then brew upgrade swiftlint; swiftlint --strict; fi 
   - if [[ "$TASK" == "TEST" ]]; then swift build -v; swift test -v; fi
   #- if [[ "$TASK" == "COV" ]]; then blah; fi
