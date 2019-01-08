@@ -4,13 +4,13 @@ dist: trusty
 
 matrix:
   include:
-    - name: Lint
+    - name: Lisnt
       os: osx
       env: TASK=LINT
-    - name: Code coverage
-      os: osx
-      osx_image: xcode10.1
-      env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.2 TASK=COV
+    # - name: Code coverage
+    #   os: osx
+    #   osx_image: xcode10.1
+    #   env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.2 TASK=COV
     - os: osx
       osx_image: xcode9.4 
       env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.0 TASK=TEST
@@ -38,6 +38,6 @@ before_script:
   - if [[ "$TASK" != "LINT" ]]; then mkdir ${PWD}/mongodb-${MONGODB_VERSION}/data; ${PWD}/mongodb-${MONGODB_VERSION}/bin/mongod --dbpath ${PWD}/mongodb-${MONGODB_VERSION}/data --logpath ${PWD}/mongodb-${MONGODB_VERSION}/mongodb.log --enableMajorityReadConcern --fork; fi
 
 script:
-  - if [[ "$TASK" == "LINT" ]]; then brew upgrade swiftlint; swiftlint --strict; fi 
+  - if [[ "$TASK" == "LINT" ]]; then HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade swiftlint; swiftlint --strict; fi 
   - if [[ "$TASK" == "TEST" ]]; then swift build -v; swift test -v; fi
-  - if [[ "$TASK" == "COV" ]]; then blah; fi
+  #- if [[ "$TASK" == "COV" ]]; then blah; fi
