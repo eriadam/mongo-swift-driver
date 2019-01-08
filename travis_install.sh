@@ -11,7 +11,7 @@ tar xzvf ${MONGODB_BASE}-${MONGODB_VERSION}.tgz -C mongodb-${MONGODB_VERSION} --
 ${PWD}/mongodb-${MONGODB_VERSION}/bin/mongod --version
 
 # install swiftenv
-eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
+#eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
   
 # clone and build libmongoc
 git clone -b r1.13 https://github.com/mongodb/mongo-c-driver /tmp/libmongoc
