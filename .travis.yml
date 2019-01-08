@@ -4,35 +4,40 @@ dist: trusty
 
 matrix:
   include:
-    - os: osx
-      osx_image: xcode9.4 
-      env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.0
-    - os: osx
-      osx_image: xcode9.4
-      env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.1
-    - os: osx
-      osx_image: xcode10.1
-      env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.1
-    - os: osx
-      osx_image: xcode10.1
-      env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.2 
     - name: Lint
       os: osx
-      env: LINT=TRUE
+      env: TASK=LINT
+    - name: Code coverage
+      os: osx
+      osx_image: xcode10.1
+      env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.2 TASK=COV
+    - os: osx
+      osx_image: xcode9.4 
+      env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.0 TASK=TEST
+    - os: osx
+      osx_image: xcode9.4
+      env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.1 TASK=TEST
+    - os: osx
+      osx_image: xcode10.1
+      env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.1 TASK=TEST
+    - os: osx
+      osx_image: xcode10.1
+      env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.2 TASK=TEST
     - os: linux
-      env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.0
+      env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.0 TASK=TEST
     - os: linux
-      env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.1
+      env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.1 TASK=TEST
     - os: linux
-      env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.2
+      env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.2 TASK=TEST
 
 install:
-  -  if [[ "$LINT" != "TRUE" ]]; then eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"; fi
+  -  if [[ "$TASK" == "TEST" ]]; then eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"; fi
   - ./travis_install.sh
 
 before_script:
-  - if [[ "$LINT" != "TRUE" ]]; then mkdir ${PWD}/mongodb-${MONGODB_VERSION}/data; ${PWD}/mongodb-${MONGODB_VERSION}/bin/mongod --dbpath ${PWD}/mongodb-${MONGODB_VERSION}/data --logpath ${PWD}/mongodb-${MONGODB_VERSION}/mongodb.log --enableMajorityReadConcern --fork; fi
+  - if [[ "$TASK" != "LINT" ]]; then mkdir ${PWD}/mongodb-${MONGODB_VERSION}/data; ${PWD}/mongodb-${MONGODB_VERSION}/bin/mongod --dbpath ${PWD}/mongodb-${MONGODB_VERSION}/data --logpath ${PWD}/mongodb-${MONGODB_VERSION}/mongodb.log --enableMajorityReadConcern --fork; fi
 
 script:
-  - if [[ "$LINT" == "TRUE" ]]; then brew upgrade swiftlint; swiftlint --strict; fi 
-  - if [[ "$LINT" != "TRUE" ]]; then swift build -v; swift test -v; fi
+  - if [[ "$TASK" == "LINT" ]]; then brew upgrade swiftlint; swiftlint --strict; fi 
+  - if [[ "$TASK" == "TEST" ]]; then swift build -v; swift test -v; fi
+  - if [[ "$TASK" == "COV" ]]; then blah; fi
