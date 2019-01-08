@@ -30,7 +30,7 @@ install:
   - ./travis_install.sh
 
 before_script:
-  - if [[ "$LINT" != "TRUE" ]]; mkdir ${PWD}/mongodb-${MONGODB_VERSION}/data; ${PWD}/mongodb-${MONGODB_VERSION}/bin/mongod --dbpath ${PWD}/mongodb-${MONGODB_VERSION}/data --logpath ${PWD}/mongodb-${MONGODB_VERSION}/mongodb.log --enableMajorityReadConcern --fork; fi
+  - if [[ "$LINT" != "TRUE" ]]; then mkdir ${PWD}/mongodb-${MONGODB_VERSION}/data; ${PWD}/mongodb-${MONGODB_VERSION}/bin/mongod --dbpath ${PWD}/mongodb-${MONGODB_VERSION}/data --logpath ${PWD}/mongodb-${MONGODB_VERSION}/mongodb.log --enableMajorityReadConcern --fork; fi
 
 script:
   - if [[ "$LINT" == "TRUE" ]]; then brew upgrade swiftlint; swiftlint --strict; fi 
