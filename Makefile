@@ -30,6 +30,10 @@ lint:
 	swiftlint autocorrect
 	swiftlint
 
+cov:
+	make project
+	xcodebuild -project MongoSwift.xcodeproj -scheme MongoSwift-Package -enableCodeCoverage YES build test
+
 clean:
 	rm -rf Packages
 	rm -rf .build

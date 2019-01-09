@@ -39,8 +39,8 @@ before_script:
 
 script:
   - if [[ "$TASK" == "LINT" ]]; then brew upgrade swiftlint; swiftlint --strict; fi 
-  - if [[ "$TASK" == "TEST" ]]; then swift test -v; fi
-  - if [[ "$TASK" == "COV" ]]; then xcodebuild -project MongoSwift.xcodeproj -scheme MongoSwift-Package -enableCodeCoverage YES build test; fi
+  - if [[ "$TASK" == "TEST" ]]; then make test; fi
+  - if [[ "$TASK" == "COV" ]]; then make cov; fi
 
 after_success:
   - if [[ "$TASK" == "COV" ]]; then  bash <(curl -s https://codecov.io/bash); fi
