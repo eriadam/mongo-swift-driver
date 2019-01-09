@@ -7,10 +7,10 @@ matrix:
     - name: Lint
       os: osx
       env: TASK=LINT
-    # - name: Code coverage
-    #   os: osx
-    #   osx_image: xcode10.1
-    #   env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.2 TASK=COV
+    - name: Code coverage
+      os: osx
+      osx_image: xcode10.1
+      env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.2 TASK=COV
     - os: osx
       osx_image: xcode9.4 
       env: MONGODB_VERSION=3.6.5 SWIFT_VERSION=4.0 TASK=TEST
@@ -39,5 +39,8 @@ before_script:
 
 script:
   - if [[ "$TASK" == "LINT" ]]; then brew upgrade swiftlint; swiftlint --strict; fi 
-  - if [[ "$TASK" == "TEST" ]]; then swift build -v; swift test -v; fi
-  #- if [[ "$TASK" == "COV" ]]; then blah; fi
+  - if [[ "$TASK" == "TEST" ]]; then swift test -v; fi
+  - if [[ "$TASK" == "COV" ]]; then xcodebuild -project MongoSwift.xcodeproj -scheme MongoSwift-Package -enableCodeCoverage YES build test; fi
+
+after_success:
+  - if [[ "$TASK" == "COV" ]]; then  bash <(curl -s https://codecov.io/bash); fi
